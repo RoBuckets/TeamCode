@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp public class robuckets_teleop_1 extends OpMode { /* declaration of variable, motors, and servos */
+@TeleOp (name = "robuckets_teleop")
+public class robuckets_teleop extends OpMode {
+
     public DcMotor rightFront;
     public DcMotor leftFront;
 
@@ -16,18 +18,10 @@ import com.qualcomm.robotcore.util.Range;
     public DcMotor Launch2;
     public DcMotor Lift;
 
-    //double launchTime = .15;
-    int launcherVal = 0;
-    //double launchPos = 1514/4.6;
-    //double powerRatio = 5.0;
-
-    public robuckets_teleop_1() {
-
-
-    }
 
     @Override
-    public void init() { /* setting motor and encoder configurations, servo configuration, sets initial servo position */
+    public void init() {
+
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftFront = hardwareMap.dcMotor.get("leftFront");
 
@@ -46,45 +40,39 @@ import com.qualcomm.robotcore.util.Range;
 
     @Override
     public void loop() {
-        //sets direction to 2 separate controls
-        /*
+
         float throttle = gamepad1.right_stick_y;
-        float direction = gamepad1.left_stick_x;
-        */
+        float direction = gamepad1.right_stick_x;
 
-        //sets it to 1 control
+        throttle = (float) Range.clip(throttle, -.5, .5);
+        direction = (float) Range.clip(direction, -.5, .5);
 
-
-
-        float throttle = gamepad1.right_stick_y; //sets forward/backward throttle to y-axis of right stick
-        float direction = gamepad1.right_stick_x; //sets right/left throttle to x-axis of right stick
-
-        throttle = (float) Range.clip(throttle, -.5, .5); //sets max for throttle at 1/2 power
-        direction = (float) Range.clip(direction, -.5, .5); //sets max for direction at 1/2 power
-
-        rightFront.setPower(direction - throttle); //sets power for turning and moving, enables both to be done at once
-        leftFront.setPower(direction + throttle); //sets power for turning and moving, enables both to be done at once
+        rightFront.setPower(direction - throttle);
+        leftFront.setPower(direction + throttle);
 
         if (gamepad2.a) {
-            if (launcherVal == 0) {
-                Rotate.setPower(0.75);
+                Lift.setPower(0.25);
                 Launch1.setPower(1.0);
                 Launch2.setPower(2.0);
-            }
-            if (gamepad2.a){
-                launcherVal = 0;
-            }
         }
 
         if (gamepad2.b) {
-            Lift.setPower(0.25);
-        }
-        else {
             Lift.setPower(0);
+            Launch1.setPower(0);
+            Launch2.setPower(0);
         }
+
+        if (gamepad2.x) {
+
+            Rotate.setPower(0.75);
+        }
+
+        if (gamepad2.y) {
+
+            Rotate.setPower(0.75);
+        }
+
     }
-
-
 
     @Override
     public void stop () {
