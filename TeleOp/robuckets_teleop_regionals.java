@@ -12,6 +12,16 @@ import com.qualcomm.robotcore.util.Range;
     public DcMotor leftFront;
     public DcMotor rightBack;
     public DcMotor leftBack;
+    
+    public DcMotor flywheel;
+    public DcMotor walkwheel;
+    public DcMotor collector;
+    public Servo pusher;
+    
+    public boolean collecting = false;
+    public boolean pusherIsOut = false;
+    public int manipStage = 0;
+    
 
     public robuckets_teleop() {
 
@@ -24,6 +34,13 @@ import com.qualcomm.robotcore.util.Range;
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftBack = hardwareMap.dcMotor.get("leftBack");
+        
+        flywheel = hardwareMap.dcMotor.get("flywheel");
+        walkwheel = hardwareMap.dcMotor.get("walkwheel");
+        collector = hardwareMap.dcMotor.get("collector");
+        pusher = hardwareMap.servo.get("pusher");
+        
+        flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
     }
 
@@ -37,7 +54,18 @@ import com.qualcomm.robotcore.util.Range;
 
     @Override
     public void loop() {
-
+        double collectorSpeed = 0.5;
+        double walkwheelSpeed1 = 0.2;
+        double walkwheelSpeed2 = 0.9;
+        double flywheelSpeed = 0.9;
+        
+        double pusherIn = 0.0;
+        double pusherOut = 100.0; 
+        
+        double manipTimeDelay1 = 2.5;
+        double manipTimeDelay2 = 1.5;
+        
+        
         float y = gamepad1.right_stick_y;
         float x = gamepad1.right_stick_x;
         float turn = gamepad1.left_stick_x;
@@ -64,6 +92,59 @@ import com.qualcomm.robotcore.util.Range;
         //rightBack.setPower(-y - x + turn);
         //leftBack.setPower(y - x + turn);
 
+        
+        //collector code
+        if(gamepad2.a) {
+            if(collecting == false){
+                collector.setPower(collectorSpeed);
+                collecting = true;
+            }
+            else {
+                collector.setPower(0.0);
+                collecting = false;
+            }
+        }
+        
+        
+        
+        //launcher code
+        if(manipStage == 0) {
+            if (gamepad2.b) {
+                walkwheel.setPower(walkwheelSpeed1);
+                manipStage++;
+            }
+        }
+        else if(manipStage == manipTimeDelay1 * 500){
+            flywheel.setPower(flywheelSpeed);
+            manipStage++;
+        }
+        else if(manipStage < manipTimeDelay1 * 1000) {
+            delay(0.001);
+            manipStage++;
+        }
+        else if(manipStage == manipTimeDelay1 * 1000) {
+            walkwheel.setPower(walkwheelSpeed2);
+            manipStage++;
+        }
+        else if(manipStage < (manipTimeDelay1 + manipTimeDelay2) * 1000) {
+            delay(0.001);
+            manipStage++;
+        }
+        else {
+            flywheel.setPower(0.0);
+            walkwheel.setPower(0.0);
+            manipStage = 0;
+        }
+        
+        //beacon code
+        if(gamepad2.x){
+            if(pusherIsOut == false){
+                pusher.setPosition(pusherOut);
+            }
+            else {
+                pusher.setPosition(pusherIn);
+            }
+        }
 
     }
 
