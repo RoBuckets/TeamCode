@@ -96,7 +96,7 @@ import com.qualcomm.robotcore.util.Range;
         //If wheels spin counter-clockwise
 
         if (endGameStarted == false) {
-            if (gamepad1.right_button) {
+            if (gamepad1.right_bumper) {
                 endGameStarted = true;
                 capServo.setPosition(capServoOut);
             }
@@ -108,7 +108,7 @@ import com.qualcomm.robotcore.util.Range;
 
         }
         else {
-            if (gamepad1.right_buttom) {
+            if (gamepad1.right_bumper) {
                 endGameStarted = false;
                 capServo.setPosition(capServoIn);
             }
@@ -151,7 +151,7 @@ import com.qualcomm.robotcore.util.Range;
             }
         }
         else if(manipStage == manipTimeDelay1 * 500){
-            launchServo.setPosition(launchServoOut)
+            launchServo.setPosition(launchServoOut);
             manipStage++;
         }
         else if(manipStage < manipTimeDelay1 * 1000) {
