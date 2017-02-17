@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import java.util.Arrays;
 
 @TeleOp public class robuckets_teleop extends OpMode {
     public DcMotor rightFront;
@@ -61,6 +62,8 @@ import com.qualcomm.robotcore.util.Range;
     public void loop() {
         double time = getRuntime();
 
+        double maxSpeed = 0.55;
+        
         double collectorSpeed = 0.75;
         double flywheelSpeed = 0.5;
 
@@ -84,8 +87,16 @@ import com.qualcomm.robotcore.util.Range;
         x = (float) Range.clip(x, -.5, .5);
         turn = (float) Range.clip(turn, -.5, .5);
 
+        
+        
         //Code for 45 degree omniwheels
-
+        
+        double rightFrontPower = 0;
+        double leftFrontPower = 0;
+        double rightBackPower = 0;
+        double leftBackPower = 0;
+        
+        
         //If wheels spin clockwise
 
         //rightFront.setPower(y - x - turn);
@@ -103,10 +114,10 @@ import com.qualcomm.robotcore.util.Range;
                 capServo.setPosition(capServoOut);
             }
 
-            rightFront.setPower(x - y + turn);
-            leftFront.setPower(x + y + turn);
-            rightBack.setPower(-y - x + turn);
-            leftBack.setPower(y - x + turn);
+            rightFrontPower = x - y + turn;
+            leftFrontPower = x + y + turn;
+            rightBackPower = -y - x + turn;
+            leftBackPower = y - x + turn;
 
         }
         else {
@@ -115,10 +126,10 @@ import com.qualcomm.robotcore.util.Range;
                 capServo.setPosition(capServoIn);
             }
 
-            rightBack.setPower(x - y + turn);
-            rightFront.setPower(x + y + turn);
-            leftBack.setPower(-y - x + turn);
-            leftFront.setPower(y - x + turn);
+            rightBackPower = x - y + turn;
+            rightFrontPower = x + y + turn;
+            leftBackPower = -y - x + turn;
+            leftFrontPower = y - x + turn;
 
             //capBall Code
             if (gamepad1.right_trigger > 0.75) {
@@ -133,7 +144,14 @@ import com.qualcomm.robotcore.util.Range;
 
         }
 
-
+        //actually move motors
+        toMultiply = optimize(frontRightPower, frontLeftPower, backRightPower, backLeftPower, maxSpeed);
+        
+        rightFront.setPower(rightFrontPower * toMultiply);
+        leftFront.setPower(leftFrontPower * toMultiply);
+        rightBack.setPower(rightBackPower * toMultiply);
+        leftBack.setPower(leftBackPower * toMultiply);
+        
 
         //collector code
         if(gamepad2.a) {
@@ -177,6 +195,11 @@ import com.qualcomm.robotcore.util.Range;
 
     }
 
+    public double optimize(double frontRightSpeed, double frontLeftSpeed, double backRightSpeed, double backLeftSpeed, double maxSpeed) {
+	    double highest = Arrays.sort([frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed]).get(3);
+	    double toMultiply = maxSpeed / highest;
+	    return toMultiply;
+    }
 
 
     @Override
