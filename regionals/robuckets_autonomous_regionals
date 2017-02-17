@@ -7,21 +7,22 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous (name = "R_All")
-public class R_All extends LinearOpMode {
+@Autonomous (name = "robuckets_autonomous_regionals")
+public class robuckets_autonomous_regionals extends LinearOpMode {
 
-    DcMotor rightFront;
-    DcMotor leftFront;
-    DcMotor rightBack;
-    DcMotor leftBack;
+    public DcMotor rightFront;
+    public DcMotor leftFront;
+    public DcMotor rightBack;
+    public DcMotor leftBack;
 
-    DcMotor flywheel;
-    DcMotor collector;
-    Servo launchServo;
+    public DcMotor Launch1;
+    public DcMotor Launch2
+    public DcMotor collector;
+    public Servo launchServo;
+    
+    public int active = 0;
 
     ColorSensor color_sensor;
-    int blue = 3;
-    int red = 10;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -31,28 +32,48 @@ public class R_All extends LinearOpMode {
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftBack = hardwareMap.dcMotor.get("leftBack");
 
-        flywheel = hardwareMap.dcMotor.get("flywheel")
+        Launch1 = hardwareMap.dcMotor.get("Launch1")
+        Launch2 = hardwareMap.dcMotor.get("Launch2")        
         collector = hardwareMap.dcMotor.get("collector")
         launchServo = hardwareMap.servo.get("launchServo");
 
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Launch1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         collector.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        color_sensor = hardwareMap.colorSensor.get("color");
+        color_sensor = hardwafeareMap.colorSensor.get("color");
 
         waitForStart();
-
-        color_sensor.enableLed(false);
-
-        beacon();
-        postBeacon();
-        autoLaunch(0.25);
-        driveForwardDistance(13420 * 0.41175);
+           
+        while (opModeIsActive() && counter != 1):
+            color_sensor.enableLed(false);
+            strafeDistance(4 ft);
+            driveForwardDistance(1.7 ft);
+            While (color_sensor.blue > 5 && color_sensor.blue < 10):
+                strafe(0.5);
+            stopDriving();
+            delay(1.0);
+            if (color_sensor.blue > 5 && color_sensor.blue < 10):
+                driveForwardDistance(0.25 ft);
+                stopDriving();
+                driveForwardDistance(-0.25 ft);
+                strafeDistance(0.5 ft);
+            While (color_sensor.blue > 5 && color_sensor.blue < 10):
+                strafe(0.5);
+            stopDriving();
+            delay(1.0);
+            if (color_sensor.blue > 5 && color_sensor.blue < 10):
+                driveForwardDistance(0.25 ft);
+                stopDriving();
+                driveForwardDistance(-0.75 ft);
+            turnDistance(0.75 ft);
+            autoLaunch(0.5);
+                
 
     }
 
@@ -64,27 +85,23 @@ public class R_All extends LinearOpMode {
         }
     }
 
-    public void driveForward(double power) {
+    public void drive(double power) {
         rightFront.setPower(-power);
         leftFront.setPower(power);
         rightBack.setPower(-power);
         leftBack.setPower(power)
     }
 
-    public void driveLeft(double power) {
-        rightFront.setPower(-power);
-        leftFront.setPower(power);
-    }
-
-    public void driveRight(double power) {
+    public void strafe(double power) {
         rightFront.setPower(power);
-        leftFront.setPower(-power);
+        leftFront.setPower(power);
+        rightBack.setPower(-power);
+        leftBack.setPower(-power)
     }
 
     public void stopDriving() {
         driveForward(0);
-        driveLeft(0);
-        driveRight(0);
+        strafe(0);
     }
 
     public void launch(double launchPower) {
