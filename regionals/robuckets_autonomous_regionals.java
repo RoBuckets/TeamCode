@@ -52,30 +52,33 @@ public class robuckets_autonomous_regionals extends LinearOpMode {
            
         while (opModeIsActive() && counter != 1):
             color_sensor.enableLed(false);
-            strafeDistance(4 ft);
-            driveForwardDistance(1.7 ft);
-            While (color_sensor.blue > 5 && color_sensor.blue < 10):
-                strafe(0.5);
-            stopDriving();
-            delay(1.0);
-            if (color_sensor.blue > 5 && color_sensor.blue < 10):
-                driveForwardDistance(0.25 ft);
-                stopDriving();
-                driveForwardDistance(-0.25 ft);
-                strafeDistance(0.5 ft);
-            While (color_sensor.blue > 5 && color_sensor.blue < 10):
-                strafe(0.5);
-            stopDriving();
-            delay(1.0);
-            if (color_sensor.blue > 5 && color_sensor.blue < 10):
-                driveForwardDistance(0.25 ft);
-                stopDriving();
-                driveForwardDistance(-0.75 ft);
-            turnDistance(0.75 ft);
-            autoLaunch(0.5);
-                
+            auto();
+            counter = 1;     
 
     }
+    
+    public void auto() {
+        strafeDistance(4 ft);
+        driveDistance(1.7 ft);
+        While (color_sensor.blue > 5 && color_sensor.blue < 10):
+            strafe(0.5);
+        stopDriving();
+        delay(1.0);
+        if (color_sensor.blue > 5 && color_sensor.blue < 10):
+            driveDistance(0.25 ft);
+            stopDriving();
+            driveDistance(-0.25 ft);
+            strafeDistance(0.5 ft);
+        While (color_sensor.blue > 5 && color_sensor.blue < 10):
+            strafe(0.5);
+        stopDriving();
+        delay(1.0);
+        if (color_sensor.blue > 5 && color_sensor.blue < 10):
+            driveDistance(0.25 ft);
+            stopDriving();
+            driveDistance(-0.75 ft);
+        turnDistance(0.75 ft);
+        autoLaunch(0.5);
 
     public void delay(double secs) { /* creation of a wait method*/
         try {
@@ -98,98 +101,97 @@ public class robuckets_autonomous_regionals extends LinearOpMode {
         rightBack.setPower(-power);
         leftBack.setPower(-power)
     }
-
-    public void stopDriving() {
-        driveForward(0);
-        strafe(0);
+    
+    public void turn(double power) {
+        rightFront.setPower(power);
+        leftFront.setPower(power);
+        rightBack.setPower(power);
+        leftBack.setPower(power)
     }
 
     public void launch(double launchPower) {
+        launchServo.setPosition(1.0);
         Launch1.setPower(launchPower);
         Launch2.setPower(launchPower);
+    }
+        
+    public void stopDriving() {
+        driveForward(0);
+        strafe(0);
+        turn(0);
     }
 
     public void stopLaunch() {
         launch(0);
+        collector.setPower(0);
+        launchServo.setPower(0);
     }
 
-    public void driveForwardDistance(double distance) {
+    public void driveDistance(double distance) {
 
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        int rightCurrentPos = rightFront.getCurrentPosition();
-        int leftCurrentPos = leftFront.getCurrentPosition();
-
-        rightFront.setTargetPosition((int) -distance);
         leftFront.setTargetPosition((int) distance);
-
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        driveForward(0.75);
+        drive(0.75);
 
-        while (rightFront.isBusy() && leftFront.isBusy()) {
+        while (leftFront.isBusy()) {
 
         }
 
-        driveForward(0);
+        drive(0);
 
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    
+    public void strafeDistance(double distance) {
+
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setTargetPosition((int) distance);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        strafe(0.75);
+
+        while (leftFront.isBusy()) {
+
+        }
+
+        strafe(0);
+
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void autoLaunch(double launchPower) {
+    public void turnDistance(double distance) {
+
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setTargetPosition((int) distance);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        turn(0.75);
+
+        while (leftFront.isBusy()) {
+
+        }
+
+        turn(0);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+        
+    public void autoLaunch(double launchPower, double collectPower) {
 
         launch(launchPower);
-
-        delay(7.0);
+        delay(1.0);
+        collector.setPower(collectPower);
+        delay(4.0);
 
         stopLaunch();
 
-    }
-
-    public void beaconPress() {
-        if(beaconPush.getPosition() < 1.0) {
-            beaconPush.setPosition(Range.clip(beaconPush.getPosition() + .01, 0, 1));     //Change added value for different speed
-        }
-        delay(3.0);
-        if(beaconPush.getPosition() > 0) {
-            beaconPush.setPosition(Range.clip(beaconPush.getPosition() - .01, 0, 1));
-        }
-    }
-
-    public void beacon() {
-        while (color_sensor.alpha() != color_sensor.red()) {
-            driveForward(0.75);
-            delay(2.0);
-            stopDriving();
-
-            driveLeft(0.5);
-            stopDriving();
-
-            driveForward(0.75);
-            delay(2.0);
-            stopDriving();
-
-            driveLeft(0.75);
-            delay(5.0);
-            stopDriving();
-        }
-        beaconPress();
-    }
-
-    public void postBeacon() {
-        driveRight(0.5);
-        delay(0.25);
-        stopDriving();
-
-        driveForward(0.5);
-        delay(1.0);
-        stopDriving();
-
-        driveRight(0.5);
-        delay(0.75);
-        stopDriving();
     }
 }
