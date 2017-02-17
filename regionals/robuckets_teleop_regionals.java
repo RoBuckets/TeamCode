@@ -13,7 +13,8 @@ import com.qualcomm.robotcore.util.Range;
     public DcMotor rightBack;
     public DcMotor leftBack;
 
-    public DcMotor flywheel;
+    public DcMotor Launch1;
+    public DcMotor Launch2;
     public DcMotor collector;
     public Servo launchServo;
 
@@ -35,16 +36,17 @@ import com.qualcomm.robotcore.util.Range;
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftBack = hardwareMap.dcMotor.get("leftBack");
 
-        flywheel = hardwareMap.dcMotor.get("flywheel");
+        Launch1 = hardwareMap.dcMotor.get("Launch1")
+        Launch2 = hardwareMap.dcMotor.get("Launch2")  
         collector = hardwareMap.dcMotor.get("collector");
         launchServo = hardwareMap.servo.get("launchServo");
 
         capServo = hardwareMap.servo.get("capServo");
         capMotor = hardwareMap.dcMotor.get("capMotor");
 
-        flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Launch1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         collector.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
     }
 
     public void delay(double secs) {
@@ -60,7 +62,7 @@ import com.qualcomm.robotcore.util.Range;
         double time = getRuntime();
 
         double collectorSpeed = 0.75;
-        double flywheelSpeed = 0.9;
+        double flywheelSpeed = 0.5;
 
         double launchServoIn = 0.0;
         double launchServoOut = 100.0;
@@ -146,7 +148,8 @@ import com.qualcomm.robotcore.util.Range;
         //launcher code
         if(manipStage == 0) {
             if (gamepad2.b) {
-                flywheel.setPower(flywheelSpeed);
+                Launch1.setPower(flywheelSpeed);
+                Launch2.setPower(flywheelSpeed);
                 manipStage++;
             }
         }
@@ -164,7 +167,8 @@ import com.qualcomm.robotcore.util.Range;
         }
         else {
             if(gamepad2.b) {
-                flywheel.setPower(0.0);
+                Launch1.setPower(0.0);
+                Launch2.setPower(0.0);
                 collector.setPower(0.0);
                 manipStage = 0;
             }
