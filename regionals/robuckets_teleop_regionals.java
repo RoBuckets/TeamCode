@@ -175,11 +175,11 @@ import java.util.Arrays;
             launchServo.setPosition(launchServoOut);
             manipStage++;
         }
-        else if(manipStage < manipTimeDelay1 * 1000) {
+        else if(manipStage < manipTimeDelay1 * 550) {
             delay(0.001);
             manipStage++;
         }
-        else if(manipStage == manipTimeDelay1 * 1000) {
+        else if(manipStage == manipTimeDelay1 * 550) {
             collector.setPower(collectorSpeed);
             manipStage++;
         }
