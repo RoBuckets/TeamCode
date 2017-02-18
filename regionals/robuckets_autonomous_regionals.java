@@ -60,7 +60,7 @@ public class robuckets_autonomous_regionals extends LinearOpMode {
     public void auto() {
         strafeDistance(4 ft);
         driveDistance(1.7 ft);
-        While (color_sensor.blue > 5 && color_sensor.blue < 10):
+        while (color_sensor.blue > 5 && color_sensor.blue < 10):
             strafe(0.5);
         stopDriving();
         delay(1.0);
@@ -69,7 +69,7 @@ public class robuckets_autonomous_regionals extends LinearOpMode {
             stopDriving();
             driveDistance(-0.25 ft);
             strafeDistance(0.5 ft);
-        While (color_sensor.blue > 5 && color_sensor.blue < 10):
+        while (color_sensor.blue > 5 && color_sensor.blue < 10):
             strafe(0.5);
         stopDriving();
         delay(1.0);
