@@ -196,7 +196,8 @@ import java.util.Arrays;
     }
 
     public double optimize(double frontRightSpeed, double frontLeftSpeed, double backRightSpeed, double backLeftSpeed, double maxSpeed) {
-        double[] highest = Arrays.sort(new double[]{frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed});
+        double[] highest = new double[]{frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed};
+        Arrays.sort(highest);
         double toMultiply = maxSpeed / highest[3];
         return toMultiply;
     }
