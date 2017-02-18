@@ -50,11 +50,11 @@ public class robuckets_autonomous_regionals extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive() && active != 1):
-        color_sensor.enableLed(false);
-        auto();
-        active = 1;
-
+        while (opModeIsActive() && active != 1) {
+            color_sensor.enableLed(false);
+            auto();
+            active = 1;
+        }
     }
 
     public void auto() {
