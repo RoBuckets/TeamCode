@@ -56,7 +56,7 @@ import com.qualcomm.robotcore.util.Range;
 
         //NEW GEAR SHIFT SYSTEM!!!!!!!!!!
        if (gamepad1.dpad_up) {
-            balut = 1;
+            balut = 1.0;
         }
         if (gamepad1.dpad_left) {
             balut=.4;
