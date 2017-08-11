@@ -123,13 +123,13 @@ import com.qualcomm.robotcore.util.Range;
 // SLOWING DOWN
        // }
         
-        if (direction > 0){
+        if (gamepad1.right_bumper){
             leftFront.setPower(balut);
             rightFront.setPower(balut);
             leftBack.setPower(balut);
             rightFront.setPower(balut);
         }
-        if (direction < 0){
+        if (gamepad1.left_bumper){
             leftFront.setPower(-1* balut);
             rightFront.setPower(-1 * balut);
             leftBack.setPower(-1* balut);
