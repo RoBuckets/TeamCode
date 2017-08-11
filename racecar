@@ -71,13 +71,13 @@ import com.qualcomm.robotcore.util.Range;
         // throttle = (float) Range.clip(throttle, -1.0, 1.0);
         direction = (float) Range.clip(direction, -2.0, 2.0);
 // GO FORWARD
-        while (gamepad1.right_trigger!=0.0) {
+        if (gamepad1.right_trigger!=0.0) {
             leftBack.setPower(balut);
             rightBack.setPower(-1 * balut);
             rightFront.setPower(-1 * balut);
             leftFront.setPower(balut);
         }
-        while (gamepad1.right_trigger==0.0){
+        if (gamepad1.right_trigger==0.0){
             leftBack.setPower(0);
             rightBack.setPower(0);
             rightFront.setPower(0);
@@ -89,13 +89,14 @@ import com.qualcomm.robotcore.util.Range;
             rightBack.setPower(balut);
             rightFront.setPower(balut);
             leftFront.setPower(-1 * balut);
-            while (gamepad1.left_trigger==0.0){
+          
+        }
+          while (gamepad1.left_trigger==0.0){
                 leftBack.setPower(0);
                 rightBack.setPower(0);
                 rightFront.setPower(0);
                 leftFront.setPower(0);
             }
-        }
 //EMERGENCY STOP
         while (gamepad1.right_trigger > 0 && gamepad1.left_trigger > 0) {
             leftBack.setPower(0);
