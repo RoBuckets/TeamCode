@@ -55,36 +55,17 @@ import com.qualcomm.robotcore.util.Range;
         float direction = gamepad1.left_stick_x;
 
         //NEW GEAR SHIFT SYSTEM!!!!!!!!!!
-        if (gamepad1.dpad_up) {
-            gear++;
-            if (gear == 1) {
-                balut=.5;
-            }
-            if (gear == 2){
-                balut=.7;
-            }
-            if (gear==3) {
-                balut = 1.0;
-            }
-                if (gear > 3) {
-                    gear=0;
-                }
-            }
-       // NEW GEAR SHIFT SLOWING DOWN PART II
-                if (gamepad1.dpad_down) {
-                    gear--;
-                    if (gear == 0) {
-                        balut = .2;
-                    }
-                    if (gear == 1) {
-                        balut = .5;
-                    }
-                    if (gear == 2) {
-                        balut = .7;
-                        if (gear > 3) ;
-                        gear = 0;
-                    }
-                }
+       if (gamepad1.dpad_up) {
+            balut = 1;
+        }
+        if (gamepad1.dpad_left) {
+            balut=.4;
+        }
+        if (gamepad1.dpad_right){
+            balut=.7;
+        }
+        if (gamepad1.dpad_down)
+            balut=.2;
 
 
         // throttle = (float) Range.clip(throttle, -1.0, 1.0);
