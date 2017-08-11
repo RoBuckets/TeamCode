@@ -100,9 +100,8 @@ import com.qualcomm.robotcore.util.Range;
 
                 rightFront.setPower(balut - .2);
                 leftFront.setPower(balut - .2);
-                rightBack.setPower(balut - .
+                rightBack.setPower(balut -.2);
                 apple = apple - 500;
-            }2);
         leftBack.setPower(balut - .2);
 
 
@@ -119,6 +118,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
         }
+     }
 
     @Override
     public void stop(){
