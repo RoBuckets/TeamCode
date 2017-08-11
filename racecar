@@ -119,8 +119,8 @@ import com.qualcomm.robotcore.util.Range;
 
         
 
-/* SLOWING DOWN
-        }
+// SLOWING DOWN
+       // }
         
         if (direction > 0){
             leftFront.setPower(balut);
@@ -134,7 +134,7 @@ import com.qualcomm.robotcore.util.Range;
             leftBack.setPower(-1* balut);
             rightFront.setPower(-1* balut);
         }
-        
+    /*    
         while (gamepad1.right_stick_y < 0 && rightFront.getPower() > 0) {
             try {
                 Thread.sleep(apple);
