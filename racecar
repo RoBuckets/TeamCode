@@ -84,17 +84,17 @@ import com.qualcomm.robotcore.util.Range;
             leftFront.setPower(0);
         }
         // REVERSE GEAR
-        while (gamepad1.left_trigger != 0) {
+        if (gamepad1.left_trigger != 0) {
             leftBack.setPower(-1 * balut);
             rightBack.setPower(balut);
             rightFront.setPower(balut);
             leftFront.setPower(-1 * balut);
-        }
-        if (gamepad1.left_trigger==0.0){
-            leftBack.setPower(0);
-            rightBack.setPower(0);
-            rightFront.setPower(0);
-            leftFront.setPower(0);
+            while (gamepad1.left_trigger==0.0){
+                leftBack.setPower(0);
+                rightBack.setPower(0);
+                rightFront.setPower(0);
+                leftFront.setPower(0);
+            }
         }
 //EMERGENCY STOP
         while (gamepad1.right_trigger > 0 && gamepad1.left_trigger > 0) {
@@ -117,10 +117,24 @@ import com.qualcomm.robotcore.util.Range;
             rightBack.setPower(balut + .2);
             apple = apple - 500;  */
 
-
+        
 
 /* SLOWING DOWN
         }
+        
+        if (direction > 0){
+            leftFront.setPower(balut);
+            rightFront.setPower(balut);
+            leftBack.setPower(balut);
+            rightFront.setPower(balut);
+        }
+        if (direction < 0){
+            leftFront.setPower(-1* balut);
+            rightFront.setPower(-1 * balut);
+            leftBack.setPower(-1* balut);
+            rightFront.setPower(-1* balut);
+        }
+        
         while (gamepad1.right_stick_y < 0 && rightFront.getPower() > 0) {
             try {
                 Thread.sleep(apple);
