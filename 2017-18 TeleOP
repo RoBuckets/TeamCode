@@ -1,0 +1,87 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.util.Range;
+
+/**
+ * Created by Comp1 on 8/9/2017.
+ */
+
+@TeleOp public class PracticeOpMode extends OpMode {
+
+    public DcMotor rightFront;
+    public DcMotor leftFront;
+    public DcMotor rightBack;
+    public DcMotor leftBack;
+
+
+    @Override
+    public void init() {
+        rightFront = hardwareMap.dcMotor.get("rightFront");
+        leftFront = hardwareMap.dcMotor.get("leftFront");
+        rightBack = hardwareMap.dcMotor.get("rightBack");
+        leftBack = hardwareMap.dcMotor.get("leftBack");
+        int gear=0;
+
+
+    }
+
+    public void delay(double secs) {
+        try {
+            Thread.sleep((long) secs * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loop() {
+        //sets direction to 2 separate controls
+        /*
+        float throttle = gamepad1.right_stick_y;
+        float strafe = gamepad1.left_stick_x;
+        float turn = gamepad1.right_stick_x;
+        */
+        
+        float rf_pow = -throttle + strafe + turn 
+        float rb_pow = -throttle - strafe + turn
+        float lf_pow = throttle + strafe + turn
+        float lb_pow = throttle - strafe + turn  
+        
+        if(rf_pow > 1 && rf_pow > rb_pow && rf_pow > lf_pow && rf_pow > lb_pow) {
+            rf_pow /= rf_pow
+            rb_pow /= rf_pow
+            lf_pow /= rf_pow
+            lb_pow /= rf_pow
+        }
+        else if(rb_pow > 1 && rb_pow > rf_pow && rb_pow > lf_pow && rb_pow > lb_pow) {
+            rf_pow /= rb_pow
+            rb_pow /= rb_pow
+            lf_pow /= rb_pow
+            lb_pow /= rb_pow
+        }
+        else if(lf_pow > 1 && lf_pow > rb_pow && lf_pow > rf_pow && lf_pow > lb_pow) {
+            rf_pow /= lf_pow
+            rb_pow /= lf_pow
+            lf_pow /= lf_pow
+            lb_pow /= lf_pow
+        }
+        else if(lb_pow > 1 && lb_pow > lb_pow && lb_pow > lf_pow && lb_pow > rf_pow) {
+            rf_pow /= lb_pow
+            rb_pow /= lb_pow
+            lf_pow /= lb_pow
+            lb_pow /= lb_pow
+        }
+        
+        rightFront.setPower(rf_pow);
+        rightBack.setPower(rb_pow);
+        leftFront.setpower(lf_pow);
+        leftBack.setpower(lb_pow);
+
+        @Override
+        public void stop () {
+        }
+    }
