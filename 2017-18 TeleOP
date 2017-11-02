@@ -16,7 +16,11 @@ import com.qualcomm.robotcore.util.Range;
     public DcMotor leftFront;
     public DcMotor rightBack;
     public DcMotor leftBack;
-
+    
+    public DcMotor liftRight;
+    public DcMotor liftLeft;
+    public DcMotor suckerRight;
+    public DcMotor suckerLeft;
 
     @Override
     public void init() {
@@ -24,9 +28,19 @@ import com.qualcomm.robotcore.util.Range;
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightBack = hardwareMap.dcMotor.get("rightBack");
         leftBack = hardwareMap.dcMotor.get("leftBack");
-        int gear=0;
-
-
+        
+        liftRight = hardwareMap.dcMotor.get("liftRight");
+        liftLeft = hardwareMap.dcMotor.get("liftLeft");
+        suckerRight = hardwareMap.dcMotor.get("suckerRight");
+        suckerLeft = hardwareMap.dcMotor.get("suckerLeft");
+        
+        float liftSpeed = 1.0;
+        float suckerSpeed = 1.0;
+        
+        boolean isLifting = false;
+        boolean isDropping = false;
+        boolean isSucking = false;
+        boolean isExpelling = false;
     }
 
     public void delay(double secs) {
@@ -42,10 +56,11 @@ import com.qualcomm.robotcore.util.Range;
         //sets direction to 2 separate controls
         /*
         float throttle = gamepad1.right_stick_y;
-        float strafe = gamepad1.left_stick_x;
-        float turn = gamepad1.right_stick_x;
+        float strafe = gamepad1.right_stick_x;
+        float turn = gamepad1.left_stick_x;
         */
         
+        //wheels
         float rf_pow = -throttle + strafe + turn 
         float rb_pow = -throttle - strafe + turn
         float lf_pow = throttle + strafe + turn
@@ -80,7 +95,48 @@ import com.qualcomm.robotcore.util.Range;
         rightBack.setPower(rb_pow);
         leftFront.setpower(lf_pow);
         leftBack.setpower(lb_pow);
+        
+        //Sucker Motors
+        if (gamepad2.a && !isSucking) {
+            suckerRight.setPower(suckerSpeed);
+            suckerLeft.setPower(-suckerSpeed);
+            isSucking = true;
+            isExpelling = false;
+        }
+        else if ((gamepad2.a || gamepad2.b) && (isSucking || isExpelling)) {
+           suckerRight.setPower(0);
+           suckerLeft.setPower(0);
+           isSucking = false;
+           isExpelling = false;
+        }
+        else if (gamepad2.b && !isExpelling) {
+            suckerRight.setPower(-suckerSpeed);
+            suckerLeft.setPower(suckerSpeed);
+            isSucking = false;
+            isExpelling = true;
+        }
 
+
+        //Lift Motors
+        if (gamepad2.x && !isLifting) {
+            liftRight.setPower(liftSpeed);
+            liftLeft.setPower(-liftSpeed);
+            isLifting = true;
+            isDropping = false;
+        }
+        else if ((gamepad2.x || gamepad2.y) && (isLifting || isDropping)) {
+           liftRight.setPower(0);
+           liftLeft.setPower(0);
+           isLifting = false;
+           isDropping = false;
+        }
+        else if (gamepad2.y && !isDropping) {
+            liftRight.setPower(-liftSpeed);
+            liftLeft.setPower(liftSpeed);
+            isLifting = false;
+            isDropping = true;
+        }
+        
         @Override
         public void stop () {
         }
